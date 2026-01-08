@@ -13,10 +13,10 @@ pub fn run(cli: crate::cli::Cli) -> Result<()> {
 
         // Save config to mark first run complete
         let cfg = config::Config::default();
-        if let Err(e) = cfg.save() {
+        if let Err(_e) = cfg.save() {
             // In production, we might want to log this differently.
             #[cfg(debug_assertions)]
-            eprintln!("Debug: Failed to save config: {}", e);
+            eprintln!("Debug: Failed to save config: {}", _e);
         }
     }
 
@@ -52,7 +52,7 @@ fn welcome() {
     use std::io::{self, Write};
 
     // Production-optimized version - fewer prints, no ANSI codes if noocolor is active
-    if !config::nocolor() {
+    if !config::isnocolor() {
         println!("\n  \x1b[1m\x1b[36mWelcome to ghk!\x1b[0m");
         println!("\n  Simple GitHub helper - push code without the complexity");
         println!("\n  Quick start:");
