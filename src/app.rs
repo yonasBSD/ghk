@@ -106,17 +106,4 @@ fn welcome() {
     let _ = io::stdout().flush();
 }
 
-// You could also consider this alternative, drier version if you prefer:
-// #[cfg(not(debug_assertions))]
-// fn welcome() {
-//     print_welcome(false); // production
-// }
-//
-// #[cfg(debug_assertions)]
-// fn welcome() {
-//     print_welcome(true); // development
-// }
-//
-// fn print_welcome(is_debug: bool) {
-//     // common implementation with variants...
-// }
+
