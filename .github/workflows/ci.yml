@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Rust
+        uses: dtolnay/rust-action@stable
+      
+      - name: Build
+        run: cargo build --release
+      
+      - name: Test
+        run: cargo test
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ghk-${{ matrix.os }}
+          path: target/release/ghk${{ matrix.os == 'windows-latest' && '.exe' || '' }}
+
+  release:
+    needs: build
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/download-artifact@v4
+      
+      - name: Upload to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ghk-ubuntu-latest/ghk
+            ghk-macos-latest/ghk
+            ghk-windows-latest/ghk.exe

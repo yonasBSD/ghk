@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ghk - Simple GitHub Helper</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --fg: #c9d1d9;
+            --accent: #58a6ff;
+            --green: #3fb950;
+            --yellow: #d29922;
+            --code-bg: #161b22;
+            --border: #30363d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        h1 span {
+            color: var(--accent);
+        }
+
+        h2 {
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--green);
+        }
+
+        .tagline {
+            font-size: 1.25rem;
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .buttons {
+            margin: 1.5rem 0;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--bg);
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: bold;
+            text-decoration: none;
+            margin-right: 0.5rem;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--fg);
+        }
+
+        .box {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        code {
+            background: var(--bg);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            display: block;
+            color: var(--accent);
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+            overflow-x: auto;
+        }
+
+        .inline-code {
+            display: inline;
+            padding: 0.2rem 0.4rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            color: var(--accent);
+        }
+
+        .alias {
+            color: var(--yellow);
+            font-size: 0.85rem;
+        }
+
+        .note {
+            background: #1c3a2e;
+            border: 1px solid #238636;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        ul {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin: 0.5rem 0;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1><span>ghk</span></h1>
+        <p class="tagline">Simple GitHub helper — push code without the complexity</p>
+
+        <div class="buttons">
+            <a href="https://github.com/bymehul/ghk/releases" class="btn">Download</a>
+            <a href="https://github.com/bymehul/ghk" class="btn btn-outline">GitHub</a>
+        </div>
+
+        <div class="note">
+            <strong>No Rust required!</strong> Download pre-built binaries and run. Only developers building from source
+            need Rust.
+        </div>
+
+        <!-- INSTALL -->
+        <h2>Install</h2>
+
+        <h3>Linux/macOS (Recommended)</h3>
+        <code>curl -sSL https://raw.githubusercontent.com/bymehul/ghk/main/install.sh | bash</code>
+
+        <h3>Debian/Ubuntu</h3>
+        <code>wget https://github.com/bymehul/ghk/releases/latest/download/ghk_1.0.0_amd64.deb
+sudo dpkg -i ghk_1.0.0_amd64.deb</code>
+
+        <h3>Fedora/RHEL</h3>
+        <code>sudo rpm -i https://github.com/bymehul/ghk/releases/latest/download/ghk-1.0.0-1.x86_64.rpm</code>
+
+        <h3>Arch Linux</h3>
+        <code>yay -S ghk</code>
+        <p style="opacity: 0.6; font-size: 0.9rem;">Or download from releases and move to /usr/bin/</p>
+
+        <h3>Windows</h3>
+        <p>Download <code class="inline-code">ghk-windows-x86_64.exe</code> from <a
+                href="https://github.com/bymehul/ghk/releases">releases</a>, rename to <code
+                class="inline-code">ghk.exe</code>, add folder to PATH.</p>
+
+        <h3>From Source (requires Rust)</h3>
+        <code>cargo install --git https://github.com/bymehul/ghk</code>
+
+        <!-- QUICK START -->
+        <h2>Quick Start</h2>
+        <div class="box">
+            <code># First time? Run setup to install git & GitHub CLI
+ghk setup
+
+# Start tracking your project
+cd my-project
+ghk init
+
+# Create repository on GitHub
+ghk create
+
+# Save your changes
+ghk push</code>
+        </div>
+
+        <!-- ALL COMMANDS -->
+        <h2>All Commands</h2>
+
+        <h3>Core Commands</h3>
+        <table>
+            <tr>
+                <th>Command</th>
+                <th>Alias</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk setup</code></td>
+                <td></td>
+                <td>Check and install git, GitHub CLI. Shows versions and connection status.</td>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk init</code></td>
+                <td></td>
+                <td>Start tracking this folder. Creates .git folder.</td>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk create</code></td>
+                <td></td>
+                <td>Create a new repository on GitHub. Prompts for name and visibility.</td>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk push</code></td>
+                <td><span class="alias">save</span></td>
+                <td>Save changes to GitHub. Prompts for a message describing your changes.</td>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk pull</code></td>
+                <td><span class="alias">sync</span></td>
+                <td>Download changes from GitHub to your computer.</td>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk clone &lt;repo&gt;</code></td>
+                <td><span class="alias">download</span></td>
+                <td>Download a repository. Use owner/repo or full URL.</td>
+            </tr>
+        </table>
+
+        <h3>View & Info Commands</h3>
+        <table>
+            <tr>
+                <th>Command</th>
+                <th>Alias</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk status</code></td>
+                <td></td>
+                <td>Show current status: branch, remote, unsaved changes, login status.</td>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk diff</code></td>
+                <td></td>
+                <td>Preview changes before saving. Shows what files changed.</td>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk history [n]</code></td>
+                <td><span class="alias">log</span></td>
+                <td>Show recent saves. Default: 10 commits.</td>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk open</code></td>
+                <td></td>
+                <td>Open repository in your web browser.</td>
+            </tr>
+        </table>
+
+        <h3>Undo & Branches</h3>
+        <table>
+            <tr>
+                <th>Command</th>
+                <th>Alias</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk undo</code></td>
+                <td></td>
+                <td>Undo last commit. Your changes are kept, just uncommitted.</td>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk branch</code></td>
+                <td></td>
+                <td>List all branches. Shows current branch.</td>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk branch &lt;name&gt;</code></td>
+                <td></td>
+                <td>Switch to branch. Creates it if doesn't exist.</td>
+            </tr>
+        </table>
+
+        <h3>Project Setup</h3>
+        <table>
+            <tr>
+                <th>Command</th>
+                <th>Alias</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk ignore</code></td>
+                <td></td>
+                <td>Add .gitignore template. Choose from: node, python, rust, go, java, web, macos, windows, linux, ide.
+                </td>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk license</code></td>
+                <td></td>
+                <td>Add LICENSE file. Choose from: MIT, Apache, GPL, Unlicense.</td>
+            </tr>
+        </table>
+
+        <h3>Account & Settings</h3>
+        <table>
+            <tr>
+                <th>Command</th>
+                <th>Alias</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk login</code></td>
+                <td></td>
+                <td>Connect to GitHub. Opens browser for authentication.</td>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk logout</code></td>
+                <td></td>
+                <td>Disconnect from GitHub.</td>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk user list</code></td>
+                <td></td>
+                <td>Show logged in accounts.</td>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk user switch &lt;name&gt;</code></td>
+                <td></td>
+                <td>Switch to different GitHub account.</td>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk config</code></td>
+                <td></td>
+                <td>View all settings.</td>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk config &lt;key&gt; &lt;value&gt;</code></td>
+                <td></td>
+                <td>Change a setting. Keys: quiet, nocolor, editor.</td>
+            </tr>
+        </table>
+
+        <h3>Shell Completions</h3>
+        <table>
+            <tr>
+                <th>Command</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk completions bash</code></td>
+                <td>Generate bash completions. Append to ~/.bashrc</td>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk completions zsh</code></td>
+                <td>Generate zsh completions. Save to ~/.zfunc/_ghk</td>
+            </tr>
+            <tr>
+                <td><code class="inline-code">ghk completions fish</code></td>
+                <td>Generate fish completions. Save to ~/.config/fish/completions/</td>
+            </tr>
+        </table>
+
+        <!-- OPTIONS -->
+        <h2>Global Options</h2>
+        <table>
+            <tr>
+                <th>Flag</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code class="inline-code">-q, --quiet</code></td>
+                <td>Suppress output (errors still shown)</td>
+            </tr>
+            <tr>
+                <td><code class="inline-code">--nocolor</code></td>
+                <td>Disable colored output</td>
+            </tr>
+            <tr>
+                <td><code class="inline-code">-h, --help</code></td>
+                <td>Show help</td>
+            </tr>
+            <tr>
+                <td><code class="inline-code">-V, --version</code></td>
+                <td>Show version</td>
+            </tr>
+        </table>
+
+        <!-- EXAMPLES -->
+        <h2>Examples</h2>
+
+        <h3>Save your work</h3>
+        <code>$ ghk push
+Changes to save:
+  M src/main.rs
+  A README.md
+What did you change? Fixed login bug
+✔ Saved to GitHub!</code>
+
+        <h3>Download a project</h3>
+        <code>$ ghk clone bymehul/ghk
+Downloading repository...
+✔ Downloaded to 'ghk'
+cd ghk to start working</code>
+
+        <h3>Add .gitignore</h3>
+        <code>$ ghk ignore node
+✔ Added node template to .gitignore</code>
+
+        <h3>Check status</h3>
+        <code>$ ghk status
+✔ Git: Ready
+  Branch: main
+  Remote: github.com/bymehul/ghk
+  No unsaved changes
+
+✔ GitHub: Logged in as bymehul</code>
+
+        <!-- LINKS -->
+        <h2>Links</h2>
+        <ul>
+            <li><a href="https://github.com/bymehul/ghk">GitHub Repository</a></li>
+            <li><a href="https://github.com/bymehul/ghk/releases">Download Releases</a></li>
+            <li><a href="https://github.com/bymehul/ghk/blob/main/INSTALL.md">Installation Guide</a></li>
+            <li><a href="https://github.com/bymehul/ghk/blob/main/CHANGELOG.md">Changelog</a></li>
+        </ul>
+
+        <footer>
+            MIT License · Made for humans who just want to save their code online
+        </footer>
+    </div>
+</body>
+
+</html>
