@@ -18,8 +18,8 @@ case "$ARCH" in
 esac
 
 case "$OS" in
-    linux) TARGET="${ARCH}-unknown-linux-gnu" ;;
-    darwin) TARGET="${ARCH}-apple-darwin" ;;
+    linux) TARGET="ghk-linux-${ARCH}" ;;
+    darwin) TARGET="ghk-macos-${ARCH}" ;;
     *) echo "Unsupported OS: $OS"; exit 1 ;;
 esac
 
@@ -27,7 +27,8 @@ esac
 echo "Fetching latest release..."
 RELEASE_URL=$(curl -sL "https://api.github.com/repos/${REPO}/releases/latest" | 
     grep "browser_download_url.*${TARGET}" | 
-    cut -d '"' -f 4)
+    grep -v ".deb" | grep -v ".rpm" |
+    cut -d '"' -f 4 | head -n 1)
 
 if [ -z "$RELEASE_URL" ]; then
     echo "Could not find release for ${TARGET}"
