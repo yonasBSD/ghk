@@ -1,6 +1,49 @@
-use anyhow::{Result, bail};
-use dialoguer::{Input, Confirm};
-use crate::{git, gh, util};
+use crate::{gh, git, util};
+use anyhow::{bail, Result};
+use dialoguer::{Confirm, Input};
+use std::fs;
+
+const DEFAULT_GITIGNORE: &str = r#"# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+.ENV
+
+# Rust
+target/
+Cargo.lock
+
+# Build outputs
+dist/
+build/
+out/
+*.class
+*.jar
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+tmp/
+"#;
 
 pub fn run() -> Result<()> {
     // Check prerequisites
@@ -41,6 +84,12 @@ pub fn run() -> Result<()> {
         .default(false)
         .interact()?;
 
+    // Create default .gitignore if it doesn't exist
+    if !std::path::Path::new(".gitignore").exists() {
+        fs::write(".gitignore", DEFAULT_GITIGNORE)?;
+        util::dim("Created default .gitignore");
+    }
+
     // Make sure there's at least one commit
     if git::haschanges()? || !hasanycommits() {
         util::info("Creating initial save...");
@@ -50,7 +99,7 @@ pub fn run() -> Result<()> {
 
     util::info("Creating repository on GitHub...");
     gh::createrepo(&name, private)?;
-    
+
     util::ok(&format!("Repository '{}' created!", name));
     util::dim("Run 'ghk push' to save your changes");
     Ok(())
